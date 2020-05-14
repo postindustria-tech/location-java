@@ -32,8 +32,8 @@
         <pipeline.version>4.1.0</pipeline.version>
         <publishrepository.id>ossrh</publishrepository.id>
         <publishrepository.url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</publishrepository.url>
-        <fetchrepository.id>pipeline-insider</fetchrepository.id>
-        <fetchrepository.url>https://51degrees.pkgs.visualstudio.com/_packaging/pipeline-insider/maven/v1</fetchrepository.url>
+        <fetchrepository.id>central</fetchrepository.id>
+        <fetchrepository.url>https://repo1.maven.org/maven2</fetchrepository.url>
         <skippackagesign>true</skippackagesign>
     </properties>
 
