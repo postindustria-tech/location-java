@@ -1,0 +1,45 @@
+pr:
+- master
+- develop
+- release/*
+
+trigger: none
+
+stages:
+
+- stage: Build
+  dependsOn: []
+  jobs:
+  - job: Build
+    pool:
+      vmImage: 'ubuntu-16.04'
+
+    steps:
+
+    - checkout: self
+      submodules: recursive
+      lfs: true
+
+    - task: MavenAuthenticate@0
+      inputs:
+        artifactsFeeds: 'pipeline-insider'
+
+    - task: Maven@1
+      displayName: 'Maven test'
+      inputs:
+        mavenPomFile: 'pom.xml'
+        goals: 'clean test'
+        options: '-Dhttps.protocols=TLSv1.2 -DfailIfNoTests=false -Dgpg.skip=true -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url)'
+        jdkVersionOption: '1.8'
+
+    - task: CopyFiles@2
+      displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+      inputs:
+        SourceFolder: '$(build.sourcesdirectory)'
+        Contents: '**/*.jar'
+        TargetFolder: '$(build.artifactstagingdirectory)'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: drop'
+      inputs:
+        PathtoPublish: '$(build.artifactstagingdirectory)'
