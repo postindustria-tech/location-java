@@ -26,6 +26,7 @@ import fiftyone.geolocation.core.Enums;
 import fiftyone.geolocation.core.data.GeoData;
 import fiftyone.geolocation.data.CloudGeoData;
 import fiftyone.pipeline.cloudrequestengine.data.CloudRequestData;
+import fiftyone.pipeline.cloudrequestengine.flowelements.CloudAspectEngineBase;
 import fiftyone.pipeline.cloudrequestengine.flowelements.CloudRequestEngine;
 import fiftyone.pipeline.core.data.AccessiblePropertyMetaData;
 import fiftyone.pipeline.core.data.EvidenceKeyFilter;
@@ -45,7 +46,7 @@ import org.slf4j.Logger;
 import java.util.*;
 import org.json.JSONArray;
 
-public class GeoLocationCloudEngine extends AspectEngineBase<CloudGeoData, AspectPropertyMetaData> {
+public class GeoLocationCloudEngine extends CloudAspectEngineBase<CloudGeoData> {
 
     private CloudRequestEngine cloudRequestEngine = null;
     private List<AspectPropertyMetaData> properties;
