@@ -1,18 +1,54 @@
+name: Build and Test Java Pipeline
+
 pr:
 - master
 - develop
-- release/*
 
 trigger: none
 
 stages:
 
-- stage: Build
+- stage: Build_Windows
   dependsOn: []
   jobs:
   - job: Build
     pool:
-      vmImage: 'ubuntu-16.04'
+      vmImage: 'windows-latest'
+
+    steps:
+
+    - checkout: self
+      submodules: recursive
+      lfs: true
+      persistCredentials: true
+
+    - task: Maven@1
+      displayName: 'Maven test'
+      inputs:
+        mavenPomFile: 'pom.xml'
+        goals: 'clean test'
+        options: '-Dhttps.protocols=TLSv1.2 -DfailIfNoTests=false -DXmx2048m'
+        jdkVersionOption: '1.8'
+        testRunTitle: 'Windows'
+
+    - task: CopyFiles@2
+      displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+      inputs:
+        SourceFolder: '$(build.sourcesdirectory)'
+        Contents: '**/*.jar'
+        TargetFolder: '$(build.artifactstagingdirectory)'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: drop'
+      inputs:
+        PathtoPublish: '$(build.artifactstagingdirectory)'
+
+- stage: Build_Mac
+  dependsOn: []
+  jobs:
+  - job: Build
+    pool:
+      vmImage: 'macOS-latest'
 
     steps:
 
@@ -20,17 +56,48 @@ stages:
       submodules: recursive
       lfs: true
 
-    - task: MavenAuthenticate@0
+    - task: Maven@1
+      displayName: 'Maven test'
       inputs:
-        artifactsFeeds: 'pipeline-insider'
+        mavenPomFile: 'pom.xml'
+        goals: 'clean test'
+        options: '-Dhttps.protocols=TLSv1.2 -DfailIfNoTests=false -DXmx2048m'
+        jdkVersionOption: '1.8'
+        testRunTitle: 'Mac'
+
+    - task: CopyFiles@2
+      displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+      inputs:
+        SourceFolder: '$(build.sourcesdirectory)'
+        Contents: '**/*.jar'
+        TargetFolder: '$(build.artifactstagingdirectory)'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: drop'
+      inputs:
+        PathtoPublish: '$(build.artifactstagingdirectory)'
+
+- stage: Build_Linux
+  dependsOn: []
+  jobs:
+  - job: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+
+    steps:
+
+    - checkout: self
+      submodules: recursive
+      lfs: true
 
     - task: Maven@1
       displayName: 'Maven test'
       inputs:
         mavenPomFile: 'pom.xml'
         goals: 'clean test'
-        options: '-Dhttps.protocols=TLSv1.2 -DfailIfNoTests=false -Dgpg.skip=true -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url)'
+        options: '-Dhttps.protocols=TLSv1.2 -DfailIfNoTests=false -DXmx2048m'
         jdkVersionOption: '1.8'
+        testRunTitle: 'Linux'
 
     - task: CopyFiles@2
       displayName: 'Copy Files to: $(build.artifactstagingdirectory)'

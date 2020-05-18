@@ -10,22 +10,22 @@ variables:
     value: $(System.AccessToken)
 
 stages:
-- stage: Build
-  dependsOn: []
+
+- stage: Build_Linux
   jobs:
   - job: Build
     pool:
       vmImage: 'ubuntu-16.04'
 
     steps:
-
     - checkout: self
       submodules: recursive
-      lfs: true
+      lfs: false
       # The line below are needed to allow the pipeline access to the
       # OAuth access token that controls write access to the git repository.
       # (Required for GitTag task)
       persistCredentials: true
+      clean: true
 
     - task: gittools.gitversion.gitversion-task.GitVersion@5
       displayName: GitVersion
@@ -46,9 +46,10 @@ stages:
         targetType: 'inline'
         script: 'echo $(gpg_passphrase) | gpg --import --batch --yes --passphrase-fd 0 "$(CodeSigningCert.secureFilePath)"'
 
-    - task: MavenAuthenticate@0
+    - task: Bash@3
       inputs:
-        artifactsFeeds: 'pipeline-insider'
+        targetType: 'inline'
+        script: 'cp $(stagingsettings.secureFilePath) /tmp/settings.xml'
 
     - task: Maven@2
       displayName: 'Maven version set'
@@ -63,15 +64,19 @@ stages:
       inputs:
         mavenPomFile: 'pom.xml'
         goals: 'clean install'
-        options: '-Pbuild -Dhttps.protocols=TLSv1.2 -Dbuildversion=$(GitVersion.SemVer) -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url) -Dpublishrepository.id=$(publishrepository.id) -Dpublishrepository.url=$(publishrepository.url) -Dskippackagesign=false -Dgpg.passphrase=$(gpg_passphrase) -DcreateChecksum=true'
+        options: '-Pbuild -Dhttps.protocols=TLSv1.2 -Dbuildversion=$(GitVersion.SemVer) -Dskippackagesign=false -Dgpg.passphrase=$(gpg_passphrase)'
         jdkVersionOption: '1.8'
+
+    - task: MavenAuthenticate@0
+      inputs:
+        artifactsFeeds: 'pipeline-insider'
 
     - task: Maven@1
       displayName: 'Maven deploy internal'
       inputs:
         mavenPomFile: 'pom.xml'
         goals: deploy
-        options: '-Pbuild -Dhttps.protocols=TLSv1.2 -Dbuildversion=$(GitVersion.SemVer) -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url) -Dpublishrepository.id=$(publishrepository.id) -Dpublishrepository.url=$(publishrepository.url) -Dskippackagesign=false -Dgpg.passphrase=$(gpg_passphrase)'
+        options: '-Pbuild -Dhttps.protocols=TLSv1.2 -Dbuildversion=$(GitVersion.SemVer) -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url) -Dpublishrepository.id=$(publishrepository.id) -Dpublishrepository.url=$(publishrepository.url) -Dskippackagesignfalse -Dgpg.passphrase=$(gpg_passphrase)'
         publishJUnitResults: false
         jdkVersionOption: '1.8'
 
@@ -81,17 +86,12 @@ stages:
       inputs:
         secureFile: 'stagingsettings.xml'
 
-    - task: Bash@3
-      inputs:
-        targetType: 'inline'
-        script: 'cp $(stagingsettings.secureFilePath) /tmp/settings.xml'
-
     - task: Maven@1
       displayName: 'Maven deploy staging'
       inputs:
         mavenPomFile: 'pom.xml'
         goals: deploy
-        options: '-Pbuild -Dhttps.protocols=TLSv1.2 -Dbuildversion=$(GitVersion.SemVer) -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url) -Dgpg.passphrase=$(gpg_passphrase)'
+        options: '-Pbuild -Dhttps.protocols=TLSv1.2 -Dbuildversion=$(GitVersion.SemVer) -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url) -Dskippackagesign=false -Dgpg.passphrase=$(gpg_passphrase)'
         publishJUnitResults: false
         jdkVersionOption: '1.8'
 
@@ -102,7 +102,6 @@ stages:
       inputs:
         tagUser: 'Azure DevOps'
         tagEmail: 'CIUser@51Degrees.com'
-        tag: 'v$(GitVersion.SemVer)'
       # Only create the tag if we also published a package as defined in
       # the previous task.
       condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), or(startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'), eq('true', variables['ForcePushMaven'])))))
@@ -112,6 +111,18 @@ stages:
       inputs:
         SourceFolder: '$(build.sourcesdirectory)'
         Contents: '**/*.jar'
+        TargetFolder: '$(build.artifactstagingdirectory)'
+
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: 'echo $(GitVersion.SemVer) >> version.txt'
+
+    - task: CopyFiles@2
+      displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+      inputs:
+        SourceFolder: '$(build.sourcesdirectory)'
+        Contents: 'version.txt'
         TargetFolder: '$(build.artifactstagingdirectory)'
 
     - task: PublishBuildArtifacts@1
