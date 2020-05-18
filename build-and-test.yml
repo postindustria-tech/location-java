@@ -22,12 +22,16 @@ stages:
       lfs: true
       persistCredentials: true
 
+    - task: MavenAuthenticate@0
+      inputs:
+        artifactsFeeds: 'pipeline-insider'
+
     - task: Maven@1
       displayName: 'Maven test'
       inputs:
         mavenPomFile: 'pom.xml'
         goals: 'clean test'
-        options: '-Dhttps.protocols=TLSv1.2 -DfailIfNoTests=false -DXmx2048m'
+        options: '-Dhttps.protocols=TLSv1.2 -DfailIfNoTests=false -DXmx2048m -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url)'
         jdkVersionOption: '1.8'
         testRunTitle: 'Windows'
 
@@ -56,12 +60,16 @@ stages:
       submodules: recursive
       lfs: true
 
-    - task: Maven@1
+   - task: MavenAuthenticate@0
+     inputs:
+       artifactsFeeds: 'pipeline-insider'
+
+   - task: Maven@1
       displayName: 'Maven test'
       inputs:
         mavenPomFile: 'pom.xml'
         goals: 'clean test'
-        options: '-Dhttps.protocols=TLSv1.2 -DfailIfNoTests=false -DXmx2048m'
+        options: '-Dhttps.protocols=TLSv1.2 -DfailIfNoTests=false -DXmx2048m -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url)'
         jdkVersionOption: '1.8'
         testRunTitle: 'Mac'
 
@@ -90,12 +98,16 @@ stages:
       submodules: recursive
       lfs: true
 
+    - task: MavenAuthenticate@0
+      inputs:
+        artifactsFeeds: 'pipeline-insider'
+
     - task: Maven@1
       displayName: 'Maven test'
       inputs:
         mavenPomFile: 'pom.xml'
         goals: 'clean test'
-        options: '-Dhttps.protocols=TLSv1.2 -DfailIfNoTests=false -DXmx2048m'
+        options: '-Dhttps.protocols=TLSv1.2 -DfailIfNoTests=false -DXmx2048m -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url)'
         jdkVersionOption: '1.8'
         testRunTitle: 'Linux'
 
