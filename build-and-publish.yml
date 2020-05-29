@@ -46,11 +46,6 @@ stages:
         targetType: 'inline'
         script: 'echo $(gpg_passphrase) | gpg --import --batch --yes --passphrase-fd 0 "$(CodeSigningCert.secureFilePath)"'
 
-    - task: Bash@3
-      inputs:
-        targetType: 'inline'
-        script: 'cp $(stagingsettings.secureFilePath) /tmp/settings.xml'
-
     - task: Maven@2
       displayName: 'Maven version set'
       inputs:
