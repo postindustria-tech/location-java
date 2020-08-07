@@ -29,12 +29,15 @@ import fiftyone.pipeline.cloudrequestengine.data.CloudRequestData;
 import fiftyone.pipeline.cloudrequestengine.flowelements.CloudAspectEngineBase;
 import fiftyone.pipeline.cloudrequestengine.flowelements.CloudRequestEngine;
 import fiftyone.pipeline.core.data.AccessiblePropertyMetaData;
+import fiftyone.pipeline.core.data.ElementPropertyMetaData;
+import fiftyone.pipeline.core.data.ElementPropertyMetaDataDefault;
 import fiftyone.pipeline.core.data.EvidenceKeyFilter;
 import fiftyone.pipeline.core.data.EvidenceKeyFilterWhitelist;
 import fiftyone.pipeline.core.data.FlowData;
 import fiftyone.pipeline.core.data.factories.ElementDataFactory;
 import fiftyone.pipeline.core.data.types.JavaScript;
 import fiftyone.pipeline.core.exceptions.PipelineConfigurationException;
+import fiftyone.pipeline.core.flowelements.Pipeline;
 import fiftyone.pipeline.engines.data.AspectPropertyMetaData;
 import fiftyone.pipeline.engines.data.AspectPropertyMetaDataDefault;
 import fiftyone.pipeline.engines.data.AspectPropertyValue;
@@ -84,15 +87,9 @@ public class GeoLocationCloudEngine extends CloudAspectEngineBase<CloudGeoData> 
     public GeoLocationCloudEngine(
         Logger logger,
         ElementDataFactory<CloudGeoData> aspectDataFactory,
-        CloudRequestEngine engine,
         Enums.GeoLocationProvider provider) {
         super(logger, aspectDataFactory);
-        if (engine == null) {
-            throw new IllegalArgumentException(
-                "The '" + getClass().getName() +
-                    "' requires a 'CloudRequestEngine' to be passed in the " +
-                    "constructor.");
-        }
+
         switch (provider) {
             case DigitalElement:
                 elementDataKey = "location_digitalelement";
@@ -106,16 +103,6 @@ public class GeoLocationCloudEngine extends CloudAspectEngineBase<CloudGeoData> 
                 throw new PipelineConfigurationException("provider ' +" +
                     provider + "' not supported by the geolocation cloud engine");
         }
-        try {
-            cloudRequestEngine = engine;
-            loadAspectProperties();
-        }
-        catch (Exception ex) {
-            logger.error("Error creating " + getClass().getName(), ex);
-            throw new PipelineConfigurationException(
-                "Error creating " + getClass().getName(),
-                ex);
-        }
     }
 
     @Override
@@ -128,11 +115,6 @@ public class GeoLocationCloudEngine extends CloudAspectEngineBase<CloudGeoData> 
             JSONObject geoObj = jsonObj.getJSONObject(getElementDataKey());
 
             Map<String, Object> methodData = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-
-            for (String propertyName : geoObj.keySet()) {
-
-            }
-
 
             for (AspectPropertyMetaData property : getProperties()) {
                 switch(property.getType().getSimpleName()) {
@@ -161,7 +143,7 @@ public class GeoLocationCloudEngine extends CloudAspectEngineBase<CloudGeoData> 
             Map<String, String> noValueReasonsMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
             for(Map.Entry<String, Object> entry : methodData.entrySet()){
                 if("null".equals(String.valueOf(entry.getValue()))){
-                    String key = this.getElementDataKey() + "." + entry.getKey().toLowerCase();
+                    String key = entry.getKey().toLowerCase();
                     Object reason = tryToGet(geoObj, key);
                     noValueReasonsMap.put(entry.getKey().toLowerCase(), (reason == null ? "" : reason.toString()));
                 }
@@ -178,18 +160,30 @@ public class GeoLocationCloudEngine extends CloudAspectEngineBase<CloudGeoData> 
     }
 
     public static Object tryToGet(JSONObject jsonObj, String key) {
-        if (jsonObj.has(key + "nullreason"))
-            return jsonObj.opt(key);
-        return null;
+        return jsonObj.opt(key + "nullreason");
     }
 
     @Override
     protected void unmanagedResourcesCleanup() {
     }
+    
+    @Override
+    public void addPipeline(Pipeline pipeline) {
+        if (cloudRequestEngine == null) {
+            cloudRequestEngine = pipeline.getElement(CloudRequestEngine.class);
+            if (cloudRequestEngine != null) {
+                if (loadAspectProperties(cloudRequestEngine) == false) {
+                    logger.error("Failed to load aspect properties");
+                }
+            }
 
-    private void loadAspectProperties() throws Exception {
+        }
+        super.addPipeline(pipeline);
+    }
+
+    private boolean loadAspectProperties(CloudRequestEngine engine) {
         Map<String, AccessiblePropertyMetaData.ProductMetaData> map =
-            cloudRequestEngine.getPublicProperties();
+            engine.getPublicProperties();
 
         if (map != null &&
             map.size() > 0 &&
@@ -205,26 +199,19 @@ public class GeoLocationCloudEngine extends CloudAspectEngineBase<CloudGeoData> 
                     item.category,
                     item.getPropertyType(),
                     new ArrayList<String>(),
-                    true);
+                    true,
+                    null,
+                    item.delayExecution,
+                    item.evidenceProperties);
+                
                 properties.add(property);
             }
+            return true;
         }
         else {
-            String reason = "";
-            if (map == null ||
-                map.size() == 0) {
-                reason = "the supplied CloudRequestEngine was unable " +
-                    "to determine the properties the cloud service can " +
-                    "populate";
-            }
-            else {
-                reason = "the supplied CloudRequestEngine cannot " +
-                "populate properties for aspect '" + getElementDataKey() + "'";
-            }
-            throw new Exception(
-                getClass().getName() + " is unable to determine the " +
-                "properties it can populate because " + reason + ". " +
-                "This will prevent the pipeline from functioning.");
+            logger.error("Aspect properties could not be loaded for" +
+                " the Device Detection cloud engine", this);
+            return false;
         }
     }
 }

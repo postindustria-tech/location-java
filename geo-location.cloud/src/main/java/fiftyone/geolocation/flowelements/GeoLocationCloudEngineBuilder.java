@@ -23,10 +23,10 @@
 package fiftyone.geolocation.flowelements;
 
 import fiftyone.geolocation.core.Enums;
-import fiftyone.geolocation.core.data.GeoData;
 import fiftyone.geolocation.core.data.GeoDataDefault;
 import fiftyone.geolocation.data.CloudGeoData;
 import fiftyone.geolocation.data.CloudGeoDataDefault;
+import fiftyone.pipeline.annotations.ElementBuilder;
 import fiftyone.pipeline.cloudrequestengine.flowelements.CloudRequestEngine;
 import fiftyone.pipeline.core.data.FlowData;
 import fiftyone.pipeline.core.data.factories.ElementDataFactory;
@@ -37,6 +37,7 @@ import org.slf4j.ILoggerFactory;
 
 import java.util.List;
 
+@ElementBuilder(alternateName = "CloudGeoLocation")
 public class GeoLocationCloudEngineBuilder extends CloudAspectEngineBuilderBase<
     GeoLocationCloudEngineBuilder,
     GeoLocationCloudEngine> {
@@ -44,11 +45,17 @@ public class GeoLocationCloudEngineBuilder extends CloudAspectEngineBuilderBase<
     private CloudRequestEngine requestEngine;
     private Enums.GeoLocationProvider provider;
 
-    public GeoLocationCloudEngineBuilder(
-        ILoggerFactory loggerFactory,
-        CloudRequestEngine engine) {
+    public GeoLocationCloudEngineBuilder(ILoggerFactory loggerFactory) {
         super(loggerFactory);
-        requestEngine = engine;
+    }
+    
+    public GeoLocationCloudEngineBuilder setGeoLocationProvider(String provider) throws Exception {
+        this.provider = Enums.GeoLocationProvider.valueOf(provider);
+        return this;
+    }
+    
+    public GeoLocationCloudEngine build() throws Exception {
+        return buildEngine();
     }
 
     public GeoLocationCloudEngine build(Enums.GeoLocationProvider provider) throws Exception {
@@ -61,7 +68,6 @@ public class GeoLocationCloudEngineBuilder extends CloudAspectEngineBuilderBase<
         return new GeoLocationCloudEngine(
             loggerFactory.getLogger(GeoLocationCloudEngine.class.getName()),
             new GeoLocationCloudDataFactory(),
-            requestEngine,
             provider);
     }
 

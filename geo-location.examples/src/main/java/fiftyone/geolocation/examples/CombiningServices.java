@@ -146,10 +146,10 @@ public class CombiningServices {
                 .setResourceKey(resourceKey)
                 .build();
             AspectEngine deviceDetectionEngine =
-                new DeviceDetectionCloudEngineBuilder(loggerFactory, httpClient, cloudRequestEngine)
+                new DeviceDetectionCloudEngineBuilder(loggerFactory)
                 .build();
             AspectEngine locationEngine =
-                new GeoLocationCloudEngineBuilder(loggerFactory, cloudRequestEngine)
+                new GeoLocationCloudEngineBuilder(loggerFactory)
                 .build(Enums.GeoLocationProvider.FiftyOneDegrees);
 
             Pipeline pipeline =

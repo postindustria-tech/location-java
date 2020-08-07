@@ -31,6 +31,8 @@ import fiftyone.pipeline.engines.data.AspectPropertyValueDefault;
 import fiftyone.pipeline.engines.flowelements.AspectEngine;
 import fiftyone.pipeline.engines.services.MissingPropertyService;
 import java.util.Map;
+import java.util.Objects;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 
 public class CloudGeoDataDefault extends GeoDataDefault implements CloudGeoData {
@@ -115,7 +117,7 @@ public class CloudGeoDataDefault extends GeoDataDefault implements CloudGeoData 
             TryGetResult<T> result = new TryGetResult<>();
             Map<String, Object> map = asKeyMap();
             if (map.containsKey(key)) {
-                Object obj = asKeyMap().get(key);
+                Object obj = map.get(key);
 
                 try {
                     Object temp = setValue(key, obj);
@@ -136,8 +138,8 @@ public class CloudGeoDataDefault extends GeoDataDefault implements CloudGeoData 
 
     private AspectPropertyValue setValue(String key, Object obj) {
         AspectPropertyValue temp = new AspectPropertyValueDefault();
-        if (obj == null) {
-            temp.setNoValueMessage(noValueReasons.get(key.split("\\.")[1]));
+        if (Objects.isNull(obj) || obj == JSONObject.NULL) {
+            temp.setNoValueMessage(noValueReasons.get(key));
         }
         else {
             temp.setValue(obj);

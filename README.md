@@ -29,7 +29,7 @@ You can either reference the projects in this repository or you can reference th
 <dependency>
     <groupId>com.51degrees</groupId>
     <artifactId>geo-location</artifactId>
-    <version>4.1.0-beta.8</version>
+    <version>4.1.3</version>
 </dependency>
 ```
 
@@ -53,5 +53,5 @@ Tests can be run in the project source by calling `mvn test`
 For complete documentation on the Pipeline API and associated engines, see the [51Degrees documentation site][Documentation].
 
 [Documentation]: https://docs.51degrees.com
-[maven]: https://search.maven.org/artifact/com.51degrees/ge-location/4.1.0-beta.8/jar
+[maven]: https://search.maven.org/artifact/com.51degrees/geo-location
 
