@@ -77,7 +77,7 @@ public class GeoLocationCloudPipelineBuilder
 
         AspectEngine geoLocationEngine = null;
         GeoLocationCloudEngineBuilder nomEngineBuilder =
-            new GeoLocationCloudEngineBuilder(loggerFactory, cloudRequestEngine);
+            new GeoLocationCloudEngineBuilder(loggerFactory);
         if (lazyLoading) {
             nomEngineBuilder.setLazyLoading(new LazyLoadingConfiguration(
                 (int)lazyLoadingTimeoutMillis));
