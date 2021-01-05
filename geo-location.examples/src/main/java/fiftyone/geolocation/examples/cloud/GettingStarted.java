@@ -102,23 +102,23 @@ public class GettingStarted {
                 .setAutoCloseElements(true)
                 .build();
 
-            FlowData flowData = pipeline.createFlowData();
-            flowData.addEvidence(EVIDENCE_GEO_LAT_PARAM_KEY, "51.458048")
-                .addEvidence(EVIDENCE_GEO_LON_PARAM_KEY, "-0.9822207999999999")
-                .process();
+            try (FlowData flowData = pipeline.createFlowData()) {
+                flowData.addEvidence(EVIDENCE_GEO_LAT_PARAM_KEY, "51.458048")
+                    .addEvidence(EVIDENCE_GEO_LON_PARAM_KEY, "-0.9822207999999999")
+                    .process();
 
-            AspectPropertyValue<String> country = flowData.get(GeoData.class).getCountry();
+                AspectPropertyValue<String> country = flowData.get(GeoData.class).getCountry();
 
-            Future future = flowData.get(GeoData.class).getProcessFuture();
-            System.out.print("Awaiting response");
-            outputUntilCancelled(".", 1000, future);
+                Future future = flowData.get(GeoData.class).getProcessFuture();
+                System.out.print("Awaiting response");
+                outputUntilCancelled(".", 1000, future);
 
-            System.out.println(flowData.get(CloudRequestData.class).getJsonResponse());
+                System.out.println(flowData.get(CloudRequestData.class).getJsonResponse());
 
-            System.out.println("Country: " + country.toString());
+                System.out.println("Country: " + country.toString());
 
-            System.out.println(flowData.get(GeoData.class).getRegion());
-
+                System.out.println(flowData.get(GeoData.class).getRegion());
+            }
             pipeline.close();
         }
     }

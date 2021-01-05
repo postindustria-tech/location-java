@@ -29,7 +29,7 @@ You can either reference the projects in this repository or you can reference th
 <dependency>
     <groupId>com.51degrees</groupId>
     <artifactId>geo-location</artifactId>
-    <version>4.1.3</version>
+    <version>4.2.0</version>
 </dependency>
 ```
 

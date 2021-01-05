@@ -47,7 +47,7 @@ import static fiftyone.pipeline.util.StringManipulation.stringJoin;
  *
  * 1. Set up configuration options to add elements to the 51Degrees Pipeline.
  *
- * @include src/main/webapp/WEB-INF/51Degrees-Cloud.xml
+ * @include geo-location.web.examples.servlet/src/main/webapp/WEB-INF/51Degrees-Cloud.xml
  *
  * 2. Configure the filter and map it to be run for all URLs.
  * ```{xml}

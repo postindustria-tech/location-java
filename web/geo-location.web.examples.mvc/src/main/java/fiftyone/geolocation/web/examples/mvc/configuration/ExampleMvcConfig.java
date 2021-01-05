@@ -50,7 +50,7 @@ import static fiftyone.pipeline.web.mvc.components.FiftyOneInterceptor.enableCli
  *
  * 1. Set up configuration options to add elements to the 51Degrees Pipeline.
  * 
- * @include src/main/webapp/WEB-INF/51Degrees-Cloud.xml
+ * @include geo-location.web.examples.mvc/src/main/webapp/WEB-INF/51Degrees-Cloud.xml
  *
  * 2. Set up MVC, enable configuration, and add the Pipeline component.
  *

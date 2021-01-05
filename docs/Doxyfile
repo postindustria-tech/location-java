@@ -38,7 +38,7 @@ PROJECT_NAME           = "51Degrees Geo-Location Java"
 # could be handy for archiving the generated documentation or if some version
 # control system is used.
 
-PROJECT_NUMBER         = 4.1
+PROJECT_NUMBER         = 4.2
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewer a
@@ -51,12 +51,12 @@ PROJECT_BRIEF          = "Geo-location services for 51Degrees Pipeline"
 # pixels and the maximum width should not exceed 200 pixels. Doxygen will copy
 # the logo to the output directory.
 
-PROJECT_LOGO           = images/logo-51Degrees-Docs.png
+PROJECT_LOGO           = ../../../docs/images/logo-51Degrees-Docs.png
 
 # The PROJECT_URL tag is used to specify the URL which is linked by the
 # PROJECT_LOGO.
 
-PROJECT_URL            = ../../documentation/4.1/index.html
+PROJECT_URL            = ../../documentation/4.2/index.html
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) path
 # into which the generated documentation will be written. If a relative path is
@@ -824,7 +824,8 @@ INPUT                  = ../README.md \
                          ../geo-location.core/src/main \
                          ../geo-location.digital-element/src/main \
                          ../geo-location.examples/src/main \
-                         ../geo-location.nominatim/src/main
+                         ../geo-location.nominatim/src/main \
+						 ../web
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -897,7 +898,8 @@ EXCLUDE_SYMBOLS        =
 # that contain example code fragments that are included (see the \include
 # command).
 
-EXAMPLE_PATH           = ../geo-location.examples
+EXAMPLE_PATH           = ../geo-location.examples \
+                         ../web
 
 # If the value of the EXAMPLE_PATH tag contains directories, you can use the
 # EXAMPLE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp and
@@ -1102,7 +1104,7 @@ GENERATE_HTML          = YES
 # The default directory is: html.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_OUTPUT            = 4.1
+HTML_OUTPUT            = 4.2
 
 # The HTML_FILE_EXTENSION tag can be used to specify the file extension for each
 # generated HTML page (for example: .htm, .php, .asp).
@@ -1129,7 +1131,7 @@ HTML_FILE_EXTENSION    = .html
 # of the possible markers and block names see the documentation.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_HEADER            =
+HTML_HEADER            = ../../../docs/header.html
 
 # The HTML_FOOTER tag can be used to specify a user-defined HTML footer for each
 # generated HTML page. If the tag is left blank doxygen will generate a standard
@@ -1139,7 +1141,7 @@ HTML_HEADER            =
 # that doxygen normally uses.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_FOOTER            = footer.html
+HTML_FOOTER            = ../../../docs/footer.html
 
 # The HTML_STYLESHEET tag can be used to specify a user-defined cascading style
 # sheet that is used by each HTML page. It can be used to fine-tune the look of
@@ -1151,7 +1153,7 @@ HTML_FOOTER            = footer.html
 # obsolete.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_STYLESHEET        = docs-main.min.css
+HTML_STYLESHEET        = ../../../docs/docs-main.min.css
 
 # The HTML_EXTRA_STYLESHEET tag can be used to specify additional user-defined
 # cascading style sheets that are included after the standard style sheets
@@ -1174,11 +1176,11 @@ HTML_EXTRA_STYLESHEET  =
 # files will be copied as-is; there are no commands or markers available.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_EXTRA_FILES       = images/icon-arrow-left-black.svg \
-                         images/icon-arrow-right-black.svg \
-                         images/icon-arrow-solid-right-mute.svg \
-                         images/icon-arrow-solid-right-orange.svg \
-                         images/icon-search.svg
+HTML_EXTRA_FILES       = ../../../docs/images/icon-arrow-left-black.svg \
+                         ../../../docs/images/icon-arrow-right-black.svg \
+                         ../../../docs/images/icon-arrow-solid-right-mute.svg \
+                         ../../../docs/images/icon-arrow-solid-right-orange.svg \
+                         ../../../docs/images/icon-search.svg
 
 # The HTML_COLORSTYLE_HUE tag controls the color of the HTML output. Doxygen
 # will adjust the colors in the style sheet and background images according to
@@ -2170,7 +2172,7 @@ SKIP_FUNCTION_MACROS   = NO
 # the path). If a tag file is not located in the directory in which doxygen is
 # run, you must also specify the path to the tagfile here.
 
-TAGFILES               = ../pipeline-java/docs/tagfile=../../pipeline-java/4.1/
+TAGFILES               = ../pipeline-java/docs/tagfile=../../pipeline-java/4.2/
 
 # When a file name is specified after GENERATE_TAGFILE, doxygen will create a
 # tag file that is based on the input files it reads. See section "Linking to
