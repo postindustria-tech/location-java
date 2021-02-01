@@ -23,12 +23,14 @@
 package fiftyone.geolocation;
 
 import fiftyone.geolocation.core.Enums;
+import fiftyone.geolocation.data.CloudGeoData;
 import fiftyone.geolocation.flowelements.GeoLocationCloudEngineBuilder;
 import fiftyone.pipeline.cloudrequestengine.flowelements.CloudRequestEngine;
 import fiftyone.pipeline.cloudrequestengine.flowelements.CloudRequestEngineBuilder;
 import fiftyone.pipeline.core.flowelements.Pipeline;
 import fiftyone.pipeline.engines.configuration.CacheConfiguration;
 import fiftyone.pipeline.engines.configuration.LazyLoadingConfiguration;
+import fiftyone.pipeline.engines.data.AspectPropertyMetaData;
 import fiftyone.pipeline.engines.flowelements.AspectEngine;
 import fiftyone.pipeline.engines.flowelements.CloudPipelineBuilderBase;
 import fiftyone.pipeline.engines.services.HttpClient;
@@ -75,7 +77,7 @@ public class GeoLocationCloudPipelineBuilder
         }
         CloudRequestEngine cloudRequestEngine = cloudRequestEngineBuilder.build();
 
-        AspectEngine geoLocationEngine = null;
+        AspectEngine<CloudGeoData, AspectPropertyMetaData> geoLocationEngine = null;
         GeoLocationCloudEngineBuilder nomEngineBuilder =
             new GeoLocationCloudEngineBuilder(loggerFactory);
         if (lazyLoading) {

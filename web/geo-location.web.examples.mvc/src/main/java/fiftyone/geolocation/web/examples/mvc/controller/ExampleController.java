@@ -24,7 +24,6 @@ package fiftyone.geolocation.web.examples.mvc.controller;
 
 import fiftyone.geolocation.core.data.GeoData;
 import fiftyone.pipeline.core.data.FlowData;
-import fiftyone.pipeline.jsonbuilder.data.JsonBuilderData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
