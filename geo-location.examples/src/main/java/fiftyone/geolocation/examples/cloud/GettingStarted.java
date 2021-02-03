@@ -29,8 +29,6 @@ import fiftyone.pipeline.cloudrequestengine.data.CloudRequestData;
 import fiftyone.pipeline.core.data.FlowData;
 import fiftyone.pipeline.core.flowelements.Pipeline;
 import fiftyone.pipeline.engines.data.AspectPropertyValue;
-import fiftyone.pipeline.engines.services.HttpClient;
-import fiftyone.pipeline.engines.services.HttpClientDefault;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +36,6 @@ import java.util.concurrent.Future;
 
 import static fiftyone.geolocation.core.Constants.EVIDENCE_GEO_LAT_PARAM_KEY;
 import static fiftyone.geolocation.core.Constants.EVIDENCE_GEO_LON_PARAM_KEY;
-import static fiftyone.pipeline.core.Constants.EVIDENCE_CLIENTIP_KEY;
 
 /**
  *  @example cloud/GettingStarted.java
@@ -109,7 +106,7 @@ public class GettingStarted {
 
                 AspectPropertyValue<String> country = flowData.get(GeoData.class).getCountry();
 
-                Future future = flowData.get(GeoData.class).getProcessFuture();
+                Future<?> future = flowData.get(GeoData.class).getProcessFuture();
                 System.out.print("Awaiting response");
                 outputUntilCancelled(".", 1000, future);
 
@@ -118,7 +115,7 @@ public class GettingStarted {
                 System.out.println("Country: " + country.toString());
 
                 System.out.println(flowData.get(GeoData.class).getRegion());
-            }
+            }          
             pipeline.close();
         }
     }
@@ -126,7 +123,7 @@ public class GettingStarted {
     private static void outputUntilCancelled(
         String text,
         int intervalMs,
-        Future future) throws InterruptedException {
+        Future<?> future) throws InterruptedException {
         while (future.isDone() == false) {
             System.out.print(text);
             Thread.sleep(intervalMs);

@@ -23,14 +23,11 @@
 package fiftyone.geolocation.flowelements;
 
 import fiftyone.geolocation.core.Enums;
-import fiftyone.geolocation.core.data.GeoData;
 import fiftyone.geolocation.data.CloudGeoData;
 import fiftyone.pipeline.cloudrequestengine.data.CloudRequestData;
 import fiftyone.pipeline.cloudrequestengine.flowelements.CloudAspectEngineBase;
 import fiftyone.pipeline.cloudrequestengine.flowelements.CloudRequestEngine;
 import fiftyone.pipeline.core.data.AccessiblePropertyMetaData;
-import fiftyone.pipeline.core.data.ElementPropertyMetaData;
-import fiftyone.pipeline.core.data.ElementPropertyMetaDataDefault;
 import fiftyone.pipeline.core.data.EvidenceKeyFilter;
 import fiftyone.pipeline.core.data.EvidenceKeyFilterWhitelist;
 import fiftyone.pipeline.core.data.FlowData;
@@ -40,9 +37,7 @@ import fiftyone.pipeline.core.exceptions.PipelineConfigurationException;
 import fiftyone.pipeline.core.flowelements.Pipeline;
 import fiftyone.pipeline.engines.data.AspectPropertyMetaData;
 import fiftyone.pipeline.engines.data.AspectPropertyMetaDataDefault;
-import fiftyone.pipeline.engines.data.AspectPropertyValue;
-import fiftyone.pipeline.engines.data.AspectPropertyValueDefault;
-import fiftyone.pipeline.engines.flowelements.AspectEngineBase;
+
 import org.json.JSONObject;
 import org.slf4j.Logger;
 
@@ -55,7 +50,7 @@ public class GeoLocationCloudEngine extends CloudAspectEngineBase<CloudGeoData> 
     private List<AspectPropertyMetaData> properties;
     private String dataSourceTier;
     private String elementDataKey;
-    private EvidenceKeyFilter evidenceKeyFilter = new EvidenceKeyFilterWhitelist(Collections.EMPTY_LIST);
+    private EvidenceKeyFilter evidenceKeyFilter = new EvidenceKeyFilterWhitelist(Collections.emptyList());
     private String dataProviderPrefix;
 
     @Override

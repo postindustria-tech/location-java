@@ -26,6 +26,8 @@ import fiftyone.geolocation.core.data.GeoDataDefault;
 import fiftyone.pipeline.core.data.FlowData;
 import fiftyone.pipeline.core.data.TryGetResult;
 import fiftyone.pipeline.core.data.types.JavaScript;
+import fiftyone.pipeline.engines.data.AspectData;
+import fiftyone.pipeline.engines.data.AspectPropertyMetaData;
 import fiftyone.pipeline.engines.data.AspectPropertyValue;
 import fiftyone.pipeline.engines.data.AspectPropertyValueDefault;
 import fiftyone.pipeline.engines.flowelements.AspectEngine;
@@ -39,7 +41,7 @@ public class CloudGeoDataDefault extends GeoDataDefault implements CloudGeoData 
 
     private Map<String, String> noValueReasons;
 
-    public CloudGeoDataDefault(Logger logger, FlowData flowData, AspectEngine engine, MissingPropertyService missingPropertyService) {
+    public CloudGeoDataDefault(Logger logger, FlowData flowData, AspectEngine<? extends AspectData, ? extends AspectPropertyMetaData> engine, MissingPropertyService missingPropertyService) {
         super(logger, flowData, engine, missingPropertyService);
     }
 
@@ -47,6 +49,7 @@ public class CloudGeoDataDefault extends GeoDataDefault implements CloudGeoData 
         noValueReasons = value;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AspectPropertyValue<JavaScript> getJavaScript() {
         return getAs("javascript", AspectPropertyValue.class, JavaScript.class);
@@ -102,6 +105,7 @@ public class CloudGeoDataDefault extends GeoDataDefault implements CloudGeoData 
         return getValueAsString("address");
     }
 
+    @SuppressWarnings("unchecked")
     private AspectPropertyValue<String> getValueAsString(String key) {
         AspectPropertyValue<String> value = getAs(key, AspectPropertyValue.class);
 
@@ -136,8 +140,8 @@ public class CloudGeoDataDefault extends GeoDataDefault implements CloudGeoData 
         }
     }
 
-    private AspectPropertyValue setValue(String key, Object obj) {
-        AspectPropertyValue temp = new AspectPropertyValueDefault();
+    private AspectPropertyValue<Object> setValue(String key, Object obj) {
+        AspectPropertyValue<Object> temp = new AspectPropertyValueDefault<Object>();
         if (Objects.isNull(obj) || obj == JSONObject.NULL) {
             temp.setNoValueMessage(noValueReasons.get(key));
         }

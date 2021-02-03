@@ -26,7 +26,6 @@ import fiftyone.geolocation.core.data.GeoData;
 import fiftyone.pipeline.core.data.FlowData;
 import fiftyone.pipeline.engines.data.AspectPropertyValue;
 import fiftyone.pipeline.engines.exceptions.NoValueException;
-import fiftyone.pipeline.jsonbuilder.data.JsonBuilderData;
 import fiftyone.pipeline.web.services.FlowDataProviderCore;
 
 import javax.servlet.ServletException;
@@ -35,9 +34,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
-
-import static fiftyone.pipeline.util.StringManipulation.stringJoin;
 
 /**
  * @example servlet/Example.java
@@ -77,6 +73,10 @@ import static fiftyone.pipeline.util.StringManipulation.stringJoin;
  */
 public class Example extends HttpServlet {
 
+    /**
+     * Serializable class version number, which is used during deserialization.
+     */
+    private static final long serialVersionUID = -7420567024186859548L;
     FlowDataProviderCore flowDataProvider = new FlowDataProviderCore.Default();
 
     /**

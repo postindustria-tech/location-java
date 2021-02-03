@@ -24,7 +24,9 @@ package fiftyone.geolocation.core.data;
 
 import fiftyone.pipeline.core.data.FlowData;
 import fiftyone.pipeline.core.data.types.JavaScript;
+import fiftyone.pipeline.engines.data.AspectData;
 import fiftyone.pipeline.engines.data.AspectDataBase;
+import fiftyone.pipeline.engines.data.AspectPropertyMetaData;
 import fiftyone.pipeline.engines.data.AspectPropertyValue;
 import fiftyone.pipeline.engines.data.AspectPropertyValueDefault;
 import fiftyone.pipeline.engines.flowelements.AspectEngine;
@@ -33,12 +35,13 @@ import org.slf4j.Logger;
 
 public class GeoDataDefault extends AspectDataBase implements GeoData {
 
-    public GeoDataDefault(Logger logger, FlowData flowData, AspectEngine engine, MissingPropertyService missingPropertyService) {
+    public GeoDataDefault(Logger logger, FlowData flowData, AspectEngine<? extends AspectData,? extends AspectPropertyMetaData> engine, MissingPropertyService missingPropertyService) {
         super(logger, flowData, engine, missingPropertyService);
         setJavaScript(new AspectPropertyValueDefault<JavaScript>(new JavaScript("")));
     }
 
 
+    @SuppressWarnings("unchecked")
     @Override
     public AspectPropertyValue<JavaScript> getJavaScript() {
         return getAs("javascript", AspectPropertyValue.class, JavaScript.class);
@@ -49,6 +52,7 @@ public class GeoDataDefault extends AspectDataBase implements GeoData {
         put("javascript", javaScript);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AspectPropertyValue<String> getRoad() {
         return getAs("road", AspectPropertyValue.class);
@@ -59,6 +63,7 @@ public class GeoDataDefault extends AspectDataBase implements GeoData {
         put("road", road);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AspectPropertyValue<String> getTown() {
         return getAs("town", AspectPropertyValue.class);
@@ -69,6 +74,7 @@ public class GeoDataDefault extends AspectDataBase implements GeoData {
         put("town", town);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AspectPropertyValue<String> getSuburb() {
         return getAs("suburb", AspectPropertyValue.class);
@@ -79,6 +85,7 @@ public class GeoDataDefault extends AspectDataBase implements GeoData {
         put("suburb", suburb);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AspectPropertyValue<String> getCounty() {
         return getAs("county", AspectPropertyValue.class);
@@ -89,6 +96,7 @@ public class GeoDataDefault extends AspectDataBase implements GeoData {
         put("county", county);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AspectPropertyValue<String> getRegion() {
         return getAs("region", AspectPropertyValue.class);
@@ -99,6 +107,7 @@ public class GeoDataDefault extends AspectDataBase implements GeoData {
         put("region", region);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AspectPropertyValue<String> getState() {
         return getAs("state", AspectPropertyValue.class);
@@ -109,6 +118,7 @@ public class GeoDataDefault extends AspectDataBase implements GeoData {
         put("state", state);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AspectPropertyValue<String> getZipCode() {
         return getAs("zipcode", AspectPropertyValue.class);
@@ -119,6 +129,7 @@ public class GeoDataDefault extends AspectDataBase implements GeoData {
         put("zipcode", zipCode);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AspectPropertyValue<String> getCountry() {
         return getAs("country", AspectPropertyValue.class);
@@ -129,6 +140,7 @@ public class GeoDataDefault extends AspectDataBase implements GeoData {
         put("country", country);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AspectPropertyValue<String> getCountryCode() {
         return getAs("countrycode", AspectPropertyValue.class);
@@ -139,6 +151,7 @@ public class GeoDataDefault extends AspectDataBase implements GeoData {
         put("countrycode", countryCode);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AspectPropertyValue<String> getAddress() {
         return getAs("address", AspectPropertyValue.class);

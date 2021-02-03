@@ -22,33 +22,29 @@
 
 package fiftyone.geolocation.examples;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import fiftyone.devicedetection.cloud.flowelements.DeviceDetectionCloudEngine;
+import fiftyone.devicedetection.cloud.data.DeviceDataCloud;
 import fiftyone.devicedetection.cloud.flowelements.DeviceDetectionCloudEngineBuilder;
 import fiftyone.devicedetection.shared.DeviceData;
-import fiftyone.geolocation.GeoLocationPipelineBuilder;
 import fiftyone.geolocation.core.Enums;
 import fiftyone.geolocation.core.data.GeoData;
+import fiftyone.geolocation.data.CloudGeoData;
 import fiftyone.geolocation.flowelements.GeoLocationCloudEngineBuilder;
 import fiftyone.pipeline.cloudrequestengine.flowelements.CloudRequestEngine;
 import fiftyone.pipeline.cloudrequestengine.flowelements.CloudRequestEngineBuilder;
 import fiftyone.pipeline.core.data.FlowData;
-import fiftyone.pipeline.core.flowelements.FlowElement;
 import fiftyone.pipeline.core.flowelements.Pipeline;
 import fiftyone.pipeline.core.flowelements.PipelineBuilder;
+import fiftyone.pipeline.engines.data.AspectPropertyMetaData;
 import fiftyone.pipeline.engines.data.AspectPropertyValue;
 import fiftyone.pipeline.engines.flowelements.AspectEngine;
 import fiftyone.pipeline.engines.services.HttpClient;
 import fiftyone.pipeline.engines.services.HttpClientDefault;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.LoggerFactory;
-
-import java.util.Arrays;
 import java.util.concurrent.Future;
 
 import static fiftyone.geolocation.core.Constants.EVIDENCE_GEO_LAT_PARAM_KEY;
 import static fiftyone.geolocation.core.Constants.EVIDENCE_GEO_LON_PARAM_KEY;
-import static fiftyone.pipeline.core.Constants.EVIDENCE_CLIENTIP_KEY;
 import static fiftyone.pipeline.core.Constants.EVIDENCE_HEADER_USERAGENT_KEY;
 
 /**
@@ -145,10 +141,10 @@ public class CombiningServices {
                 new CloudRequestEngineBuilder(loggerFactory)
                 .setResourceKey(resourceKey)
                 .build();
-            AspectEngine deviceDetectionEngine =
+            AspectEngine<DeviceDataCloud, AspectPropertyMetaData> deviceDetectionEngine =
                 new DeviceDetectionCloudEngineBuilder(loggerFactory)
                 .build();
-            AspectEngine locationEngine =
+            AspectEngine<CloudGeoData, AspectPropertyMetaData> locationEngine =
                 new GeoLocationCloudEngineBuilder(loggerFactory)
                 .build(Enums.GeoLocationProvider.FiftyOneDegrees);
 
@@ -170,7 +166,7 @@ public class CombiningServices {
 
                 AspectPropertyValue<Boolean> isMobile = flowData.get(DeviceData.class).getIsMobile();
 
-                Future future = flowData.get(GeoData.class).getProcessFuture();
+                Future<?> future = flowData.get(GeoData.class).getProcessFuture();
                 System.out.print("Awaiting response");
                 outputUntilCancelled(".", 1000, future);
                 System.out.println("Country: " + country.toString());
@@ -183,7 +179,7 @@ public class CombiningServices {
     private static void outputUntilCancelled(
         String text,
         int intervalMs,
-        Future future) throws InterruptedException {
+        Future<?> future) throws InterruptedException {
         while (future.isDone() == false) {
             System.out.print(text);
             Thread.sleep(intervalMs);
