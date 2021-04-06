@@ -52,6 +52,6 @@ Tests can be run in the project source by calling `mvn test`
 
 For complete documentation on the Pipeline API and associated engines, see the [51Degrees documentation site][Documentation].
 
-[Documentation]: https://docs.51degrees.com
+[Documentation]: https://51degrees.com/documentation/index.html
 [maven]: https://search.maven.org/artifact/com.51degrees/geo-location
 
