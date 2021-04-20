@@ -59,4 +59,10 @@ public interface GeoData extends AspectData {
 
     AspectPropertyValue<String> getAddress();
     void setAddress(AspectPropertyValue<String> address);
+    
+    AspectPropertyValue<String> getBuilding();
+    void setBuilding(AspectPropertyValue<String> building);
+       
+    AspectPropertyValue<String> getStreetNumber();
+    void setStreetNumber(AspectPropertyValue<String> streetNumber);
 }

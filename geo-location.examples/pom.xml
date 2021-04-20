@@ -46,8 +46,8 @@
 		<configuration>
 				<showWarnings>true</showWarnings>
 				<compilerArgs>
-						<arg>-Xlint:all,-try</arg>
 						<arg>-Werror</arg>
+						<arg>-Xlint:all,-options,-try</arg>
 		</compilerArgs>
 		</configuration>
         </plugin>	

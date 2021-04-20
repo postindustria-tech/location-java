@@ -6,6 +6,9 @@ pr:
 
 trigger: none
 
+variables: 
+  - group: InternalKeys
+
 stages:
 
 - stage: Build_Windows
@@ -21,10 +24,16 @@ stages:
       submodules: recursive
       lfs: true
       persistCredentials: true
-
+      
     - task: MavenAuthenticate@0
       inputs:
         artifactsFeeds: 'pipeline-insider'
+
+    # Set resource key environment variable on windows
+    - powershell: |
+        $Env:SuperResourceKey = "$(SuperResourceKey)"
+        $Env:FOD_CLOUD_API_URL = "$(FOD_CLOUD_API_URL)"
+      displayName: 'Set Resource Key Environment Variable'
 
     - task: Maven@1
       displayName: 'Maven test'
@@ -32,8 +41,15 @@ stages:
         mavenPomFile: 'pom.xml'
         goals: 'clean test'
         options: '-Dhttps.protocols=TLSv1.2 -DfailIfNoTests=false -DXmx2048m -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url)'
-        jdkVersionOption: '1.8'
+        jdkVersionOption: '1.11'
+        publishJUnitResults: false 
+
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '**/TEST-*.xml' 
         testRunTitle: 'Windows'
+      condition: succeededOrFailed()
 
     - task: CopyFiles@2
       displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
@@ -69,9 +85,16 @@ stages:
       inputs:
         mavenPomFile: 'pom.xml'
         goals: 'clean test'
-        options: '-Dhttps.protocols=TLSv1.2 -DfailIfNoTests=false -DXmx2048m -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url)'
+        options: '-Dhttps.protocols=TLSv1.2 -DfailIfNoTests=false -DXmx2048m -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url) -DSuperResourceKey=$(SuperResourceKey) -DFOD_CLOUD_API_URL=$(FOD_CLOUD_API_URL)'
         jdkVersionOption: '1.8'
+        publishJUnitResults: false 
+
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '**/TEST-*.xml' 
         testRunTitle: 'Mac'
+      condition: succeededOrFailed()
 
     - task: CopyFiles@2
       displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
@@ -107,9 +130,16 @@ stages:
       inputs:
         mavenPomFile: 'pom.xml'
         goals: 'clean test'
-        options: '-Dhttps.protocols=TLSv1.2 -DfailIfNoTests=false -DXmx2048m -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url)'
+        options: '-Dhttps.protocols=TLSv1.2 -DfailIfNoTests=false -DXmx2048m -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url) -DSuperResourceKey=$(SuperResourceKey) -DFOD_CLOUD_API_URL=$(FOD_CLOUD_API_URL)'
         jdkVersionOption: '1.8'
+        publishJUnitResults: false 
+
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '**/TEST-*.xml' 
         testRunTitle: 'Linux'
+      condition: succeededOrFailed()
 
     - task: CopyFiles@2
       displayName: 'Copy Files to: $(build.artifactstagingdirectory)'

@@ -25,6 +25,13 @@
             <version>${pipeline.version}</version>
         </dependency>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>pipeline.common</artifactId>
+            <version>${pipeline.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
@@ -50,7 +57,7 @@
         	    <target>${maven.compiler.target}</target>  
 				<showWarnings>true</showWarnings>
 				<compilerArgs>
-						<arg>-Xlint:all</arg>
+						<arg>-Xlint:all,-options,-try</arg>
 						<arg>-Werror</arg>
 				</compilerArgs>
 				</configuration>

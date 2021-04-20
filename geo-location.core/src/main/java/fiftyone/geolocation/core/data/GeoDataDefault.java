@@ -161,4 +161,26 @@ public class GeoDataDefault extends AspectDataBase implements GeoData {
     public void setAddress(AspectPropertyValue<String> address) {
         put("address", address);
     }
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public AspectPropertyValue<String> getBuilding() {
+		return getAs("building", AspectPropertyValue.class);
+	}
+
+	@Override
+	public void setBuilding(AspectPropertyValue<String> building) {
+		put("building", building);		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public AspectPropertyValue<String> getStreetNumber() {
+		return getAs("streetNumber", AspectPropertyValue.class);
+	}
+
+	@Override
+	public void setStreetNumber(AspectPropertyValue<String> streetNumber) {
+		put("streetNumber", streetNumber);		
+	}
 }
