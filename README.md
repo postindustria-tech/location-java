@@ -10,7 +10,7 @@ This repository contains the geo-location engines for the Java implementation of
 
 ## Pre-requesites
 
-The Pipeline engines are written in Java and target Java 7.
+The Pipeline engines are written in Java and target Java 8.
 
 ## Packages
 - **pipeline.geo-location** - Geo-location engines and related projects.
@@ -29,7 +29,7 @@ You can either reference the projects in this repository or you can reference th
 <dependency>
     <groupId>com.51degrees</groupId>
     <artifactId>geo-location</artifactId>
-    <version>4.2.0</version>
+    <version>4.3.2</version>
 </dependency>
 ```
 
@@ -52,6 +52,6 @@ Tests can be run in the project source by calling `mvn test`
 
 For complete documentation on the Pipeline API and associated engines, see the [51Degrees documentation site][Documentation].
 
-[Documentation]: https://docs.51degrees.com
+[Documentation]: https://51degrees.com/documentation/index.html
 [maven]: https://search.maven.org/artifact/com.51degrees/geo-location
 
