@@ -4,12 +4,12 @@
     <parent>
         <groupId>com.51degrees</groupId>
         <artifactId>pipeline.geo-location</artifactId>
-        <version>4.2.4-SNAPSHOT</version>
+        <version>4.2.5-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     
     <artifactId>geo-location.web.examples.servlet</artifactId>
-    <version>4.2.4-SNAPSHOT</version>
+    <version>4.2.5-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>51Degrees :: Geo Location :: Examples :: Servlet</name>
     
