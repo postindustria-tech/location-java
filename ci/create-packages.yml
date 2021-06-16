@@ -3,20 +3,44 @@ trigger:
 - develop
 - release/*
 
+# Don't trigger for a pull request
+pr: none
+
+# Schedule to run overnight
+schedules:
+- cron: "0 20 * * *"
+  displayName: Daily overnight build
+  branches:
+    include:
+    - develop
+    
 variables:
   - group: CertificateVariables
+  - group: InternalKeys
   # Access token for the git repository. Used by the git tag task.
   - name: system_accesstoken
     value: $(System.AccessToken)
-  - group: InternalKeys
+  # Include shared variables
+  - template: shared-variables.yml
 
 stages:
 
-- stage: Build_Linux
+- template: shared-build-and-test-platforms.yml
+  parameters:
+    windowsImage: $(windowsImage)
+    linuxImage: $(linuxImage)
+    macImage: $(macImage)
+
+
+- stage: Build_Packages
+  displayName: Build Packages
+  dependsOn: [Windows,Linux,MacOS]
   jobs:
-  - job: Build
+  - job: Create_Packages
+    displayName: Create Packages
+     
     pool:
-      vmImage: 'ubuntu-16.04'
+      vmImage: $(linuxImage)
 
     steps:
     - checkout: self
@@ -42,7 +66,7 @@ stages:
         secureFile: '51Degrees Code Signing Certificate.asc'
 
     - task: Bash@3
-      continueOnError: true
+      displayName: 'Import Code Signing Certificate'
       inputs:
         targetType: 'inline'
         script: 'echo $(gpg_passphrase) | gpg --import --batch --yes --passphrase-fd 0 "$(CodeSigningCert.secureFilePath)"'
@@ -61,22 +85,11 @@ stages:
         mavenPomFile: 'pom.xml'
         goals: 'clean install'
         options: '-Pbuild -Dhttps.protocols=TLSv1.2 -Dbuildversion=$(GitVersion.SemVer) -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url) -Dskippackagesign=false -Dgpg.passphrase=$(gpg_passphrase) -DSuperResourceKey=$(SuperResourceKey)'
-        jdkVersionOption: '1.8'
+        jdkVersionOption: $(jdkVersionDefault)
 
     - task: MavenAuthenticate@0
       inputs:
         artifactsFeeds: 'pipeline-insider'
-
-    # Add a tag to the git repository with the version number of
-    # the package that has just been published
-    - task: ATP.ATP-GitTag.GitTag.GitTag@5
-      displayName: 'Tag Repo With Version Number'
-      inputs:
-        tagUser: 'Azure DevOps'
-        tagEmail: 'CIUser@51Degrees.com'
-      # Only create the tag if we also published a package as defined in
-      # the previous task.
-      condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), or(startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'), eq('true', variables['ForcePushMaven'])))))
 
     - task: CopyFiles@2
       displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
@@ -86,6 +99,7 @@ stages:
         TargetFolder: '$(build.artifactstagingdirectory)'
 
     - task: Bash@3
+      displayName: 'Write GitVersion to version.txt'    
       inputs:
         targetType: 'inline'
         script: 'echo $(GitVersion.SemVer) >> version.txt'
@@ -101,3 +115,14 @@ stages:
       displayName: 'Publish Artifact: drop'
       inputs:
         PathtoPublish: '$(build.artifactstagingdirectory)'
+        
+    # Add a tag to the git repository with the version number of
+    # the package that has just been published
+    - task: ATP.ATP-GitTag.GitTag.GitTag@5
+      displayName: 'Tag Repo With Version Number'
+      inputs:
+        tagUser: 'Azure DevOps'
+        tagEmail: 'CIUser@51Degrees.com'
+      # Only create the tag if we also published a package as defined in
+      # the previous task.
+      condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), or(eq(variables['Build.SourceBranch'], 'refs/heads/develop'), or(startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'), eq('true', variables['ForcePushMaven'])))))
