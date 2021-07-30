@@ -23,6 +23,7 @@ variables:
 - template: shared-variables.yml
 - name: targetBranch
   value: 'refs/heads/master'
+- group: CIAutomation
   
 stages:
 - stage: publish_internal
@@ -44,53 +45,7 @@ stages:
             parameters:
               publishEndpoint: 'internal-feed'
               resouceKey: $(SuperResourceKey)
-
-# Publish to Staging               
-- stage: publish_staging
-  displayName: Publish to Staging
-  dependsOn: []
-  condition: eq(variables['build.sourceBranch'], variables['targetBranch'])
-  jobs:
-  - deployment: deploy_staging
-    displayName: Deploy to Staging
-    pool:
-      vmImage: $(linuxImage)
-      workspace:
-        clean: all
-    environment: staging
-    strategy:
-      runOnce:
-        deploy:
-          steps: 
-          
-          - template: shared-publish-packages-internal.yml
-            parameters:
-              publishEndpoint: 'staging'
-              resouceKey: $(SuperResourceKey)
-
-# Promote from staging to Maven           
-- stage: publish_maven
-  displayName: Publish to Maven
-  dependsOn: [publish_staging]
-  condition: eq(variables['build.sourceBranch'], variables['targetBranch'])
-  jobs:
-  - deployment: deploy_maven
-    displayName: Promote from Staging to Maven
-    pool:
-      vmImage: $(linuxImage)
-      workspace:
-        clean: all
-    environment: maven
-    strategy:
-      runOnce:
-        deploy:
-          steps: 
-          - template: shared-publish-packages-maven.yml
-
-# Publish to GitHub Stage           
-- template: shared-publish-github-stage.yml@ciTemplates
-  parameters:
-    imageName: $(linuxImage)
-    branchName: ${{ variables.targetBranch }}
+              internalFeedName: $(InternalFeedName)
+              templates: 'ciTemplates'
           
  
