@@ -22,7 +22,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>device-detection</artifactId>
-            <version>4.2.7</version>
+            <version>${devicedetection.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
