@@ -75,6 +75,9 @@ public class GeoLocationCloudPipelineBuilder
         if (licenseKey != null && licenseKey.isEmpty() == false) {
             cloudRequestEngineBuilder.setLicenseKey(licenseKey);
         }
+        if (cloudRequestOrigin != null && cloudRequestOrigin.isEmpty() == false) {
+            cloudRequestEngineBuilder.setCloudRequestOrigin(cloudRequestOrigin);
+        }
         CloudRequestEngine cloudRequestEngine = cloudRequestEngineBuilder.build();
 
         AspectEngine<CloudGeoData, AspectPropertyMetaData> geoLocationEngine = null;
