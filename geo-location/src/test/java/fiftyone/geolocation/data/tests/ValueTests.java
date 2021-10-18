@@ -20,7 +20,7 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-package fiftyone.geolocation.data;
+package fiftyone.geolocation.data.tests;
 
 import fiftyone.geolocation.Constants;
 import fiftyone.geolocation.Wrapper;
