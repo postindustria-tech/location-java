@@ -20,21 +20,21 @@
  * such notice(s) shall fulfill the requirements of that article.
  * ********************************************************************* */
 
-package fiftyone.geolocation.data;
+package fiftyone.geolocation.data.tests;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import fiftyone.geolocation.Wrapper;
-import fiftyone.geolocation.Wrapper51Degrees;
+import fiftyone.geolocation.WrapperDigitalElement;
 
-public class FiftyoneValueTests  {
+public class DEValueTests  {
 
     	private Wrapper wrapper;
     	
         @Before
         public void init() throws Exception {
-        	wrapper = new Wrapper51Degrees();
+        	wrapper = new WrapperDigitalElement();
         }
 
         @Test

@@ -33,8 +33,8 @@
         <slf4j-simple.version>1.7.21</slf4j-simple.version>
         <mockito-core.version>2.16.0</mockito-core.version>
         <org.json.version>20180813</org.json.version>
-        <pipeline.version>4.3.3</pipeline.version>
-		<devicedetection.version>4.3.3</devicedetection.version>
+        <pipeline.version>4.3.4</pipeline.version>
+		<devicedetection.version>4.3.6</devicedetection.version>
         <publishrepository.id>ossrh</publishrepository.id>
         <publishrepository.url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</publishrepository.url>
         <fetchrepository.id>central</fetchrepository.id>
@@ -102,24 +102,23 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.6</version>
+                <artifactId>maven-jarsigner-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                <execution>
+                    <id>sign</id>
+                    <goals>
+                    <goal>sign</goal>
+                    </goals>
+                </execution>
+                </executions>
                 <configuration>
                     <skip>${skippackagesign}</skip>
-                    <gpgArguments>
-                        <arg>--pinentry-mode</arg>
-                        <arg>loopback</arg>
-                    </gpgArguments>                    
+                    <keystore>${keystore}</keystore>
+                    <alias>${alias}</alias>
+                    <storepass>${keystorepass}</storepass>
+                    <keypass>${keypass}</keypass>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 			
 		<plugin>
