@@ -61,6 +61,10 @@ stages:
         retryCount: 5
       continueOnError: true
 
+    - template: java/shared-package-signing-steps.yml@ciTemplates
+      parameters:
+        gpgPassPhrase: $(JavaMavenGPGKeyPassphrase)
+
     - task: Maven@2
       displayName: 'Maven version set'
       inputs:
@@ -74,7 +78,7 @@ stages:
       inputs:
         mavenPomFile: 'pom.xml'
         goals: 'clean install'
-        options: '-Pbuild -Dhttps.protocols=TLSv1.2 -Dbuildversion=$(GitVersionSemVer) -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url) -Dskippackagesign=false -Dkeystore="$(CodeSigningCert.secureFilePath)" -Dalias=$(CodeSigningCertAlias) -Dkeypass=$(CodeSigningCertPassword) -Dkeystorepass=$(CodeSigningCertPassword) -DSuperResourceKey=$(SuperResourceKey)'
+        options: '-Pbuild -Dhttps.protocols=TLSv1.2 -Dbuildversion=$(GitVersionSemVer) -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url) -Dskippackagesign=false -Dgpg.passphrase=$(JavaMavenGPGKeyPassphrase) -Dkeystore="$(CodeSigningCert.secureFilePath)" -Dalias=$(CodeSigningCertAlias) -Dkeypass=$(CodeSigningCertPassword) -Dkeystorepass=$(CodeSigningCertPassword) -DSuperResourceKey=$(SuperResourceKey)'
         jdkVersionOption: $(jdkVersionDefault)
 
     - task: MavenAuthenticate@0

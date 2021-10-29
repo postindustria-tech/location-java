@@ -33,7 +33,7 @@
         <slf4j-simple.version>1.7.21</slf4j-simple.version>
         <mockito-core.version>2.16.0</mockito-core.version>
         <org.json.version>20180813</org.json.version>
-        <pipeline.version>4.3.4</pipeline.version>
+        <pipeline.version>4.3.5</pipeline.version>
 		<devicedetection.version>4.3.6</devicedetection.version>
         <publishrepository.id>ossrh</publishrepository.id>
         <publishrepository.url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</publishrepository.url>
@@ -120,19 +120,39 @@
                     <keypass>${keypass}</keypass>
                 </configuration>
             </plugin>
-			
-		<plugin>
-   		<groupId>org.apache.maven.plugins</groupId>
-  		<artifactId>maven-compiler-plugin</artifactId>
-  		<version>3.8.1</version>
-		<configuration>
-				<showWarnings>true</showWarnings>
-				<compilerArgs>
-						<arg>-Werror</arg>
-						<arg>-Xlint:all,-options</arg>
-		</compilerArgs>
-		</configuration>
-        </plugin>	
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <configuration>
+                    <skip>${skippackagesign}</skip>
+                    <gpgArguments>
+                        <arg>--pinentry-mode</arg>
+                        <arg>loopback</arg>
+                    </gpgArguments>                    
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <showWarnings>true</showWarnings>
+                    <compilerArgs>
+                        <arg>-Werror</arg>
+                        <arg>-Xlint:all,-options</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>	
         </plugins>
     </build>
 
