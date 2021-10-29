@@ -27,6 +27,10 @@ steps:
     retryCount: 5
   continueOnError: true
 
+- template: java/shared-package-signing-steps.yml@ciTemplates
+  parameters:
+    gpgPassPhrase: $(JavaMavenGPGKeyPassphrase)
+
 # Connect to internal feed
 - task: MavenAuthenticate@0
   displayName: 'Maven Authenticate'
@@ -39,7 +43,7 @@ steps:
   inputs:
     mavenPomFile: '$(PIPELINE.WORKSPACE)/build-pipeline/drop/pom.xml'
     goals: deploy
-    options: '-Pbuild -Dhttps.protocols=TLSv1.2 -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url) -Dpublishrepository.id=$(publishrepository.id) -Dpublishrepository.url=$(publishrepository.url) -Dskippackagesign=false -Dkeystore="$(CodeSigningCert.secureFilePath)" -Dalias=$(CodeSigningCertAlias) -Dkeypass=$(CodeSigningCertPassword) -Dkeystorepass=$(CodeSigningCertPassword) -DSuperResourceKey=${{ parameters.resouceKey }}'
+    options: '-Pbuild -Dhttps.protocols=TLSv1.2 -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url) -Dpublishrepository.id=$(publishrepository.id) -Dpublishrepository.url=$(publishrepository.url) -Dskippackagesign=false -Dgpg.passphrase=$(JavaMavenGPGKeyPassphrase) -Dkeystore="$(CodeSigningCert.secureFilePath)" -Dalias=$(CodeSigningCertAlias) -Dkeypass=$(CodeSigningCertPassword) -Dkeystorepass=$(CodeSigningCertPassword) -DSuperResourceKey=${{ parameters.resouceKey }}'
     publishJUnitResults: false
     jdkVersionOption: $(jdkVersionDefault)
     mavenAuthenticateFeed: false
@@ -51,7 +55,7 @@ steps:
   inputs:
     mavenPomFile: '$(PIPELINE.WORKSPACE)/build-pipeline/drop/pom.xml'
     goals: deploy
-    options: '-Pbuild -Dhttps.protocols=TLSv1.2 -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url) -Dskippackagesign=false -Dkeystore="$(CodeSigningCert.secureFilePath)" -Dalias=$(CodeSigningCertAlias) -Dkeypass=$(CodeSigningCertPassword) -Dkeystorepass=$(CodeSigningCertPassword) -s $(stagingsettings.secureFilePath) -DSuperResourceKey=${{ parameters.resouceKey }}'
+    options: '-Pbuild -Dhttps.protocols=TLSv1.2 -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url) -Dskippackagesign=false -Dgpg.passphrase=$(JavaMavenGPGKeyPassphrase) -Dkeystore="$(CodeSigningCert.secureFilePath)" -Dalias=$(CodeSigningCertAlias) -Dkeypass=$(CodeSigningCertPassword) -Dkeystorepass=$(CodeSigningCertPassword) -s $(stagingsettings.secureFilePath) -DSuperResourceKey=${{ parameters.resouceKey }}'
     publishJUnitResults: false
     jdkVersionOption: $(jdkVersionDefault)
     mavenAuthenticateFeed: false
