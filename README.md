@@ -12,37 +12,38 @@ This repository contains the geo-location engines for the Java implementation of
 
 The Pipeline engines are written in Java and target Java 8.
 
-## Packages
-- **pipeline.geo-location** - Geo-location engines and related projects.
-  - **geo-location.core** - Shared classes used by the geo-location engines.
-  - **geo-location.cloud** - A Java engine which retrieves geo-location results by consuming data from the 51Degrees cloud service.
-  - **geo-location.digital-element** - A Java engine which retrieves geo-location results by consuming data from a DigitalElement endpoint.
-  - **geo-location.nominatim** - A Java engine which retrieves geo-location results by consuming data from a Nominatim endpoint.
-  - **geo-location** - Contains the geo-location engine builders.
-  - **geo-location.examples** - Contains examples of how to use the geo-location engines.
-  
 ## Installation
 
 You can either reference the projects in this repository or you can reference the [Maven][maven] packages in your project:
 
-```
+### Maven
+
+The 51Degrees Java Geo Location package is available on maven. Make sure to select
+the [latest version](https://mvnrepository.com/artifact/com.51degrees/geo-location).
+
+```xml
+<!-- Make sure to select the latest version from https://mvnrepository.com/artifact/com.51degrees/pipeline.geo-location -->
 <dependency>
     <groupId>com.51degrees</groupId>
-    <artifactId>geo-location</artifactId>
-    <version>4.3.2</version>
+    <artifactId>pipeline.geo-location</artifactId>
+    <version>4.3.9</version>
+    <type>pom</type>
 </dependency>
 ```
 
-Make sure to select the latest version from [Maven.][maven]
+## Packages
 
-## Examples
+- **pipeline.geo-location** - Geo-location engines and related projects.
+- **geo-location.core** - Shared classes used by the geo-location engines.
+- **geo-location.cloud** - A Java engine which retrieves geo-location results by consuming data from the 51Degrees cloud service.
+- **geo-location.digital-element** - A Java engine which retrieves geo-location results by consuming data from a DigitalElement endpoint.
+- **geo-location.nominatim** - A Java engine which retrieves geo-location results by consuming data from a Nominatim endpoint.
+- **geo-location** - Contains the geo-location engine builders.
 
-Examples can be found in the `geo-location.examples/` folder, there are separate sources for cloud, DigitalElement and Nominatim implementations and solutions for Java. See below for a list of examples.
+The following examples are "no longer" distributed as maven jars or installed by the default build, and need to be built by you:
 
-|Example|Description|Implemtation|
-|-------|-----------|------------|
-|GettingStarted|This example uses geo-location to determine the country from a longitude and latidude.|Cloud / DigitalElement / Nominatim|
-|CombiningServices|This example uses geo-location alongside device detection to determine the country and device.|Cloud|
+- **geo-location.shell.examples** - Geo location examples to be run from the command line.
+- **geo-location.web.examples** - Geo location examples to be run via Tomcat, servlets etc.
 
 ## Tests
 

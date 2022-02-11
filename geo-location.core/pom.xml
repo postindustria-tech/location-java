@@ -5,8 +5,7 @@
     <parent>
         <artifactId>pipeline.geo-location</artifactId>
         <groupId>com.51degrees</groupId>
-        <version>4.2.5-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <version>4.3.10-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -16,19 +15,15 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>pipeline.engines</artifactId>
-            <version>${pipeline.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>pipeline.cloudrequestengine</artifactId>
             <version>${pipeline.version}</version>
         </dependency>
+
+        <!-- note scope for MavenRunListener -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
@@ -38,24 +33,4 @@
             <url>https://opensource.org/licenses/EUPL-1.2</url>
         </license>
     </licenses>
-	
-	<build>
-    <plugins>	
-	    <plugin>
-   		<groupId>org.apache.maven.plugins</groupId>
-  		<artifactId>maven-compiler-plugin</artifactId>
-  		<version>${maven-compiler-plugin.version}</version>
-                <configuration>
-        	    <source>${maven.compiler.source}</source>
-        	    <target>${maven.compiler.target}</target>  
-				<showWarnings>true</showWarnings>
-				<compilerArgs>
-						<arg>-Werror</arg>
-						<arg>-Xlint:all,-options</arg>
-				</compilerArgs>
-				</configuration>
-		</plugin>
-	</plugins>
-    </build>
-				
 </project>
