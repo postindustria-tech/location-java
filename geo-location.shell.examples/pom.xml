@@ -9,23 +9,27 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>geo-location.cloud</artifactId>
-    <name>51Degrees :: Geo Location :: Cloud</name>
+    <artifactId>geo-location.examples</artifactId>
+    <name>51Degrees :: Geo Location :: Shell :: Examples</name>
+
+    <properties>
+        <maven.deploy.skip>false</maven.deploy.skip>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>geo-location.core</artifactId>
+            <artifactId>geo-location</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>pipeline.cloudrequestengine</artifactId>
-            <version>${pipeline.version}</version>
+            <artifactId>device-detection</artifactId>
+            <version>${devicedetection.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>pipeline.engines.fiftyone</artifactId>
+            <artifactId>pipeline.engines</artifactId>
             <version>${pipeline.version}</version>
         </dependency>
         <dependency>
