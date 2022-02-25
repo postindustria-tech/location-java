@@ -5,12 +5,19 @@
     <parent>
         <artifactId>pipeline.geo-location</artifactId>
         <groupId>com.51degrees</groupId>
-        <version>4.3.11-SNAPSHOT</version>
+        <version>4.3.12-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>geo-location.examples</artifactId>
     <name>51Degrees :: Geo Location :: Shell :: Examples</name>
+	<description>These examples are no longer available in Maven</description>
+	<distributionManagement>
+		<relocation>
+			<groupId>com.51degrees.no_longer_in_maven</groupId>
+			<message>These examples are no longer available in Maven</message>
+		</relocation>
+	</distributionManagement>
 
     <properties>
         <maven.deploy.skip>false</maven.deploy.skip>
