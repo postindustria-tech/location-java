@@ -13,13 +13,6 @@
     <version>4.3.12-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>51Degrees :: Geo Location :: Web :: Examples :: MVC</name>
-	<description>This example is no longer available in Maven</description>
-	<distributionManagement>
-		<relocation>
-			<groupId>com.51degrees.no_longer_in_maven</groupId>
-			<message>This example is no longer available in Maven</message>
-		</relocation>
-	</distributionManagement>
     
     <dependencies>
         <dependency>

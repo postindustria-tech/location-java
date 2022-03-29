@@ -12,13 +12,6 @@
     <artifactId>geo-location.web.examples</artifactId>
     <name>51Degrees :: Geo Location :: Web :: Examples</name>
     <packaging>pom</packaging>
-	<description>These examples are no longer available in Maven</description>
-	<distributionManagement>
-		<relocation>
-			<groupId>com.51degrees.no_longer_in_maven</groupId>
-			<message>These examples are no longer available in Maven</message>
-		</relocation>
-	</distributionManagement>
 
     <modules>
         <module>geo-location.web.examples.mvc</module>
@@ -27,7 +20,7 @@
     </modules>
 
     <properties>
-        <maven.deploy.skip>false</maven.deploy.skip>
+        <maven.deploy.skip>true</maven.deploy.skip>
 
         <tomcat.version>8.5.73</tomcat.version>
         <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
