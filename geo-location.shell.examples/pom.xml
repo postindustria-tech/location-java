@@ -11,16 +11,9 @@
 
     <artifactId>geo-location.examples</artifactId>
     <name>51Degrees :: Geo Location :: Shell :: Examples</name>
-	<description>These examples are no longer available in Maven</description>
-	<distributionManagement>
-		<relocation>
-			<groupId>com.51degrees.no_longer_in_maven</groupId>
-			<message>These examples are no longer available in Maven</message>
-		</relocation>
-	</distributionManagement>
 
     <properties>
-        <maven.deploy.skip>false</maven.deploy.skip>
+        <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
     <dependencies>
