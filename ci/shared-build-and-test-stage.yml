@@ -20,8 +20,10 @@ stages:
     condition: ne(${{ parameters.runTests }}, 'Off')
 
     variables: 
-      - group: InternalKeys
-      - group: CIAutomation
+    - group: InternalKeys
+    - group: CIAutomation
+    - name: SNAPSHOT
+      value: true
       
     strategy:
       matrix:
@@ -36,7 +38,6 @@ stages:
       vmImage: ${{ parameters.imageName }}
      
     steps:
-
     - checkout: self
       submodules: recursive
       lfs: true
@@ -44,8 +45,16 @@ stages:
       
     - task: MavenAuthenticate@0
       inputs:
-        artifactsFeeds: '$(InternalFeedName)'
-        
+        artifactsFeeds: $(fetchrepository.id),$(snapshotrepository.id)
+
+    - script: echo "snapshot repo is $(snapshotrepository.id)"
+    - script: echo "snapshot url is $(snapshotrepository.url)"
+    - script: echo "SNAPSHOT is $(SNAPSHOT)"
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: cat ~/.m2/settings.xml
+
     # Java 17 is not currently available on MS hosted Linux build agents.
     # Download Open JDK 17 archive.
     - task: Bash@3
@@ -70,13 +79,35 @@ stages:
       condition: and(eq('${{ parameters.stageName }}', 'Linux'), eq(variables.jdkVersion, '1.17'))
       displayName: Install OpenJDK 17
 
-    - task: Maven@1
+    - task: Maven@3
+      displayName: 'Maven effective POM'
+      inputs:
+        mavenPomFile: 'pom.xml'
+        goals: 'help:effective-pom'
+        options: '-Dhttps.protocols=TLSv1.2 -DfailIfNoTests=false -DXmx2048m -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url) -Dsnapshotrepository.id=$(snapshotrepository.id) -Dsnapshotrepository.url=$(snapshotrepository.url) -DFOD_CLOUD_API_URL=$(FOD_CLOUD_API_URL) -DSuperResourceKey=$(SuperResourceKey) --no-transfer-progress'
+        jdkVersionOption: $(jdkVersion)
+        skipEffectivePom: false
+        testRunTitle: '${{ parameters.imageName }}-$(jdkVersion)'
+
+    - task: Maven@3
+      displayName: 'Maven active profiles'
+      inputs:
+        mavenPomFile: 'pom.xml'
+        goals: 'help:active-profiles'
+        options: '-Dhttps.protocols=TLSv1.2 -DfailIfNoTests=false -Psnapshot -DXmx2048m -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url) -Dsnapshotrepository.id=$(snapshotrepository.id) -Dsnapshotrepository.url=$(snapshotrepository.url) -DFOD_CLOUD_API_URL=$(FOD_CLOUD_API_URL) -DSuperResourceKey=$(SuperResourceKey) --no-transfer-progress'
+        jdkVersionOption: $(jdkVersion)
+        skipEffectivePom: false
+        testRunTitle: '${{ parameters.imageName }}-$(jdkVersion)'
+
+
+    - task: Maven@3
       displayName: 'Maven test'
       inputs:
         mavenPomFile: 'pom.xml'
         goals: 'clean test'
-        options: '-Dhttps.protocols=TLSv1.2 -DfailIfNoTests=false -DXmx2048m -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url) -DFOD_CLOUD_API_URL=$(FOD_CLOUD_API_URL) -DSuperResourceKey=$(SuperResourceKey) --no-transfer-progress'
+        options: '-Dhttps.protocols=TLSv1.2 -DfailIfNoTests=false -Psnapshot -DXmx2048m -Dfetchrepository.id=$(fetchrepository.id) -Dfetchrepository.url=$(fetchrepository.url) -Dsnapshotrepository.id=$(snapshotrepository.id) -Dsnapshotrepository.url=$(snapshotrepository.url) -DFOD_CLOUD_API_URL=$(FOD_CLOUD_API_URL) -DSuperResourceKey=$(SuperResourceKey) --no-transfer-progress'
         jdkVersionOption: $(jdkVersion)
+        skipEffectivePom: false
         testRunTitle: '${{ parameters.imageName }}-$(jdkVersion)'
 
     - task: PublishTestResults@2
