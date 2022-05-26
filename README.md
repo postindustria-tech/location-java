@@ -8,9 +8,18 @@
 
 This repository contains the geo-location engines for the Java implementation of the Pipeline API.
 
-## Pre-requesites
+## Dependencies
 
-The Pipeline engines are written in Java and target Java 8.
+The [tested versions](https://51degrees.com/documentation/_info__tested_versions.html) page shows 
+the JDK versions that we currently test against. The software may run fine against other versions, 
+but additional caution should be applied.
+
+### Data
+
+You will require a [resource key](https://51degrees.com/documentation/_info__resource_keys.html)
+to use the Cloud API. You can create resource keys using our 
+[configurator](https://configure.51degrees.com/), see our 
+[documentation](https://51degrees.com/documentation/_concepts__configurator.html) on how to use this.
 
 ## Installation
 
@@ -48,6 +57,18 @@ The following examples are "no longer" distributed as maven jars or installed by
 ## Tests
 
 Tests can be run in the project source by calling `mvn test`
+
+## Examples
+
+Examples can be found in the `geo-location.shell.examples` and `geo-location.web.examples` folders. 
+See below for a list of the examples available.
+
+|Example           |Description|
+|------------------|-----------|
+|GettingStarted    |This example uses the 51Degrees cloud to determine the country from a longitude and latitude.|
+|CombiningServices |This example uses geo-location alongside device detection to determine the country and device.|
+|Servlet           |Demonstrates a simple servlet-based website that uses latitude and longitude gathered from the client device to perform a location lookup.|
+|MVC               |Demonstrates a simple mvc-based website that uses latitude and longitude gathered from the client device to perform a location lookup.|
 
 ## Project documentation
 
