@@ -4,7 +4,7 @@ param(
     [string]$Name
 )
 
-./java/run-update-dependencies.ps1 -RepoName "location-java-test" -ProjectDir $ProjectDir -Name $Name
+./java/run-update-dependencies.ps1 -RepoName "location-java" -ProjectDir $ProjectDir -Name $Name
 
 exit $LASTEXITCODE
 

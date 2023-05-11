@@ -4,7 +4,7 @@ param (
     [string]$VariableName
 )
 
-./java/get-next-package-version.ps1 -RepoName "location-java-test" -VariableName $VariableName
+./java/get-next-package-version.ps1 -RepoName "location-java" -VariableName $VariableName
 
 
 exit $LASTEXITCODE

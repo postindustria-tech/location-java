@@ -18,7 +18,7 @@ param(
 )
 
 
-./java/build-package.ps1 -RepoName "location-java-test" -ProjectDir $ProjectDir -Name $Name -Version $Version -JavaGpgKeyPassphrase $JavaGpgKeyPassphrase -CodeSigningCert $CodeSigningCert -JavaPGP $JavaPGP -CodeSigningCertAlias $CodeSigningCertAlias -CodeSigningCertPassword $CodeSigningCertPassword -MavenSettings $MavenSettings
+./java/build-package.ps1 -RepoName "location-java" -ProjectDir $ProjectDir -Name $Name -Version $Version -JavaGpgKeyPassphrase $JavaGpgKeyPassphrase -CodeSigningCert $CodeSigningCert -JavaPGP $JavaPGP -CodeSigningCertAlias $CodeSigningCertAlias -CodeSigningCertPassword $CodeSigningCertPassword -MavenSettings $MavenSettings
 
 
 exit $LASTEXITCODE
