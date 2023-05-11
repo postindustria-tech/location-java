@@ -9,8 +9,7 @@
     "Image": "ubuntu-latest",
     "Name": "Ubuntu_Java_11",
     "JavaSDKEnvVar": "JAVA_HOME_11_X64",
-    "RunPerformance": true,
-    "PackageRequirement" : true
+    "RunPerformance": true
   },
   {
     "Image": "ubuntu-latest",
