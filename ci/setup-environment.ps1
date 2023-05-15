@@ -6,6 +6,6 @@ param(
     [string]$ProjectDir = "."
 )
 
-./java/setup-enviroment.ps1 -RepoName "location-java" -ProjectDir $ProjectDir -JavaSDKEnvVar $JavaSDKEnvVar
+./java/setup-enviroment.ps1 -RepoName $RepoName -ProjectDir $ProjectDir -JavaSDKEnvVar $JavaSDKEnvVar
 
 exit $LASTEXITCODE
