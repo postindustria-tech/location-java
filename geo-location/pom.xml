@@ -33,6 +33,7 @@
 
     <artifactId>geo-location</artifactId>
     <name>51Degrees :: Geo Location</name>
+    <description>Perform reverse geocoding using longitude and latitude to populate postal addresses</description>
 
     <dependencies>
         <dependency>
