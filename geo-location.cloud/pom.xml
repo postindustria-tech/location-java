@@ -33,6 +33,7 @@
 
     <artifactId>geo-location.cloud</artifactId>
     <name>51Degrees :: Geo Location :: Cloud</name>
+    <description>Performs reverse geocoding using the 51Degrees cloud service.</description>
 
     <dependencies>
         <dependency>
