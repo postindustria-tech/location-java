@@ -9,11 +9,12 @@ on:
 jobs:
   # Run the common workflow to test and publish the main branch
   Nightly_Publish_Main:
-    uses: 51Degrees/common-ci/.github/workflows/nightly-publish-main.yml@main
+    uses: postindustria-tech/common-ci/.github/workflows/nightly-publish-main.yml@jarsign-use-keyvault-3
     with:
       repo-name: ${{ github.event.repository.name }}
       org-name: ${{ github.event.repository.owner.login }}
       build-platform: ubuntu-20.04
+      common-ci-ref: ef34abcb5f85ad5a7cacd87cadd898eaa27db1af
     secrets:
       token: ${{ secrets.ACCESS_TOKEN }}
       TestResourceKey: ${{ secrets.SUPER_RESOURCE_KEY}}
